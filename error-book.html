@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>错题本</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>全部错题汇总</h1>
+    <div class="card">
+        <div class="btn-row">
+            <button id="clearErrBtn" class="red">清空全部错题</button>
+            <a href="index.html" class="blue">返回首页</a>
+            <a href="report.html" class="green">训练报告</a>
+        </div>
+        <div id="errorBox"></div>
+    </div>
+</div>
+<script type="module">
+    import { renderErrorBook } from "./js/errorBook.js";
+    renderErrorBook();
+</script>
+</body>
+</html>
