@@ -1,84 +1,216 @@
-const QuestionBank = {
-    grade1: {
-        easy: {
-            oral: ["3+5", "12-4", "9+7", "15-8", "6+6", "10+9", "14-6", "8+8"],
-            simple: [],
-            math: ["小明有5支笔，妈妈又给3支，一共有多少支？", "盘子里7个苹果，吃掉2个还剩几个？"]
-        },
-        hard: {
-            oral: ["18+7", "21-9", "14+8", "23-11", "16-9", "15+6", "24-13"],
-            simple: [],
-            math: ["树上12只鸟，飞走5只，又飞来4只，现在有几只？", "小红9颗糖，分给弟弟4颗，爸爸再给6颗，现有几颗？"]
-        }
-    },
-    grade2: {
-        easy: {
-            oral: ["4×5", "18÷3", "7×6", "24÷4", "9×3", "8×2", "30÷5"],
-            simple: [],
-            math: ["一盒铅笔6支，3盒一共有多少支？", "每排8人，2排一共多少学生？"]
-        },
-        hard: {
-            oral: ["8×7", "42÷6", "9×9", "56÷8", "7×8", "6×9", "63÷7"],
-            simple: [],
-            math: ["3组同学，每组8人，走了5人，还剩多少人？", "笔记本5元一本，买7本带40元够吗？"]
-        }
-    },
-    grade3: {
-        easy: {
-            oral: ["25+36", "80-23", "12×3", "60÷5", "44+16", "90-45"],
-            simple: ["25+17+75", "48+56+52", "13+29+87"],
-            math: ["一本书120页，每天看20页，几天可以看完？", "一箱牛奶24盒，4箱一共多少盒？"]
-        },
-        hard: {
-            oral: ["135+48", "210-76", "16×5", "144÷12", "125+75", "300-128"],
-            simple: ["36+72+64+28", "125+39+75", "58+44+42+56"],
-            math: ["文具每盒18元，买4盒付100元，需要找回多少钱？", "长方形长12米，宽5米，周长是多少米？"]
-        }
-    },
-    grade4: {
-        easy: {
-            oral: ["120×4", "360÷6", "45+155", "200-78", "25×4", "480÷8"],
-            simple: ["125×8×4", "25×(40+4)", "5×13×2"],
-            math: ["长方形长15cm，宽8cm，周长多少厘米？", "汽车每小时50km，3小时行驶多少千米？"]
-        },
-        hard: {
-            oral: ["240×6", "720÷15", "328+172", "500-136", "125×8", "960÷12"],
-            simple: ["99×36", "125×32×25", "45×102"],
-            math: ["货车每小时65km，行驶4小时，总路程多少千米？", "商店运来12箱饮料，每箱24瓶，卖出100瓶剩多少？"]
-        }
-    },
-    grade5: {
-        easy: {
-            oral: ["0.3+0.5", "1.2-0.4", "2.5×4", "6.3÷0.7", "0.6+0.9", "5.2-2"],
-            simple: ["2.7+4.8+7.3", "12.5-3.6-6.4", "4.1+5.6+5.9"],
-            math: ["一根绳子12米，用去3.5米，还剩多少米？", "苹果每千克5.5元，买2千克多少钱？"]
-        },
-        hard: {
-            oral: ["3.6×0.5", "7.2÷0.8", "1/2+1/4", "3/5-1/10", "0.25×8", "4/5-1/2"],
-            simple: ["0.25×32×1.25", "4.8×99+4.8", "7.6×101-7.6"],
-            math: ["果园果树120棵，梨树占2/5，梨树有多少棵？", "修路总长18km，已经修1/3，还剩多少km？"]
-        }
-    },
-    grade6: {
-        easy: {
-            oral: ["1/3+1/6", "3/4×2", "0.2×50", "4÷0.5", "1/2×4", "60×0.3"],
-            simple: ["5/7+3/8+2/7", "12×(1/4+1/6)", "3/5+2/9+2/5"],
-            math: ["商品原价100元，打八折出售卖多少钱？", "全班40人，女生占3/5，女生多少人？"]
-        },
-        hard: {
-            oral: ["2/3÷4", "0.75×12", "3/5÷3/10", "120×25%", "4÷2/3", "18×15%"],
-            simple: ["36×5/8+64÷(8/5)", "99%×120+1%×120", "24×(1/2-1/3)"],
-            math: ["甲乙两地相距120km，客车60km/h，货车40km/h，相向而行多久相遇？", "一件商品降价20%后售价80元，原价多少元？"]
+/**
+ * 按年级自动生成数学题，适配1-6年级课内知识点
+ * grade:1~6
+ * level:easy基础 / hard培优
+ * type:oral口算 / simple简便计算 / math应用题
+ */
+function generateQuestion(grade, level, type) {
+    let q = "";
+    let answer = null;
+    const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+    // 一年级：只加减法
+    if (grade == 1) {
+        if (type === "oral") {
+            if (level === "easy") {
+                // 基础：20以内不进退位加减
+                let a = rand(1, 10);
+                let b = rand(1, 10);
+                if (Math.random() > 0.5) {
+                    q = `${a}+${b}`;
+                    answer = a + b;
+                } else {
+                    if (a >= b) {
+                        q = `${a}-${b}`;
+                        answer = a - b;
+                    } else {
+                        q = `${b}-${a}`;
+                        answer = b - a;
+                    }
+                }
+            } else {
+                // 培优：50以内进退位
+                let a = rand(10, 40);
+                let b = rand(10, 40);
+                if (Math.random() > 0.5) {
+                    q = `${a}+${b}`;
+                    answer = a + b;
+                } else {
+                    q = `${Math.max(a,b)}-${Math.min(a,b)}`;
+                    answer = Math.max(a,b) - Math.min(a,b);
+                }
+            }
+        } else if (type === "math") {
+            // 一年级应用题
+            const sceneAdd = ["苹果", "铅笔", "花朵", "小鸟", "糖果"];
+            const sceneSub = ["吃掉", "飞走", "送出去", "拿走"];
+            if (Math.random() > 0.5) {
+                let num1 = rand(3, 12);
+                let num2 = rand(2, 9);
+                let thing = sceneAdd[rand(0, sceneAdd.length - 1)];
+                q = `桌上有${num1}个${thing}，妈妈又拿来${num2}个，一共有多少个？`;
+                answer = num1 + num2;
+            } else {
+                let total = rand(8, 20);
+                let out = rand(2, 7);
+                let thing = sceneAdd[rand(0, sceneAdd.length - 1)];
+                let act = sceneSub[rand(0, sceneSub.length - 1)];
+                q = `一共有${total}个${thing}，${act}${out}个，还剩多少个？`;
+                answer = total - out;
+            }
         }
     }
+
+    // 二年级：表内乘除、百以内加减
+    if (grade == 2) {
+        if (type === "oral") {
+            if (level === "easy") {
+                // 基础 表内乘除1-9
+                let a = rand(1, 9);
+                let b = rand(1, 9);
+                if (Math.random() > 0.5) {
+                    q = `${a}×${b}`;
+                    answer = a * b;
+                } else {
+                    q = `${a*b}÷${a}`;
+                    answer = b;
+                }
+            } else {
+                // 培优：两位数加减+混合乘除
+                if (Math.random() > 0.5) {
+                    let a = rand(10, 90);
+                    let b = rand(10, 90);
+                    q = `${a}+${b}`;
+                    answer = a + b;
+                } else {
+                    let x = rand(2, 9);
+                    let y = rand(2, 9);
+                    q = `${x}×${y}+${rand(1,10)}`;
+                    answer = x * y + rand(1,10);
+                }
+            }
+        } else if (type === "math") {
+            // 乘法应用题
+            let group = rand(2, 6);
+            let per = rand(3, 8);
+            q = `每组有${per}支笔，一共有${group}组，总共有多少支笔？`;
+            answer = group * per;
+        }
+    }
+
+    // 三年级：三位数加减、两位数乘除
+    if (grade == 3) {
+        if (type === "oral") {
+            if (level === "easy") {
+                let a = rand(100, 300);
+                let b = rand(10, 99);
+                q = Math.random() > 0.5 ? `${a}+${b}` : `${a}-${b}`;
+                answer = q.includes("+") ? a + b : a - b;
+            } else {
+                let a = rand(10, 30);
+                let b = rand(10, 20);
+                q = `${a}×${b}`;
+                answer = a * b;
+            }
+        } else if (type === "simple") {
+            // 简便加法凑整
+            let a = rand(100, 500);
+            let b = rand(1, 9) * 10;
+            let c = rand(1, 9);
+            q = `${a}+${b}+${c}`;
+            answer = a + b + c;
+        } else if (type === "math") {
+            let box = rand(3, 8);
+            let num = rand(20, 50);
+            q = `一箱有${num}本书，${box}箱一共有多少本书？`;
+            answer = box * num;
+        }
+    }
+
+    // 四年级：乘法分配律、交换律简便运算
+    if (grade == 4) {
+        if (type === "oral") {
+            let a = rand(100, 999);
+            let b = rand(2, 12);
+            q = `${a}×${b}`;
+            answer = a * b;
+        } else if (type === "simple") {
+            // 乘法分配律 a×(b+c)
+            let a = rand(2, 15);
+            let b = rand(1, 9);
+            let c = rand(1, 9);
+            q = `${a}×(${b}+${c})`;
+            answer = a * (b + c);
+        } else if (type === "math") {
+            let len = rand(10, 30);
+            let wid = rand(5, 20);
+            q = `长方形长${len}米，宽${wid}米，周长是多少？`;
+            answer = (len + wid) * 2;
+        }
+    }
+
+    // 五年级：小数、分数四则
+    if (grade == 5) {
+        if (type === "oral") {
+            if (level === "easy") {
+                let a = rand(1, 9) + 0.1 * rand(1, 9);
+                let b = rand(1, 9) + 0.1 * rand(1, 9);
+                q = `${a}+${b}`;
+                answer = Number((a + b).toFixed(2));
+            } else {
+                // 分数加减法
+                let fm1 = rand(2, 6);
+                let fm2 = rand(2, 6);
+                let fz1 = rand(1, fm1 - 1);
+                let fz2 = rand(1, fm2 - 1);
+                q = `${fz1}/${fm1}+${fz2}/${fm2}`;
+                answer = null;
+            }
+        } else if (type === "simple") {
+            // 小数凑整简便
+            let a = rand(2, 9) + 0.5;
+            let b = rand(3, 9) + 0.5;
+            q = `${a}×4+${b}×4`;
+            answer = Number((a * 4 + b * 4).toFixed(2));
+        } else if (type === "math") {
+            let m = rand(10, 30) + 0.5;
+            let price = rand(3, 10) + 0.5;
+            q = `苹果每千克${price}元，买${m}千克需要多少钱？`;
+            answer = Number((m * price).toFixed(2));
+        }
+    }
+
+    // 六年级：分数乘除、百分数
+    if (grade == 6) {
+        if (type === "oral") {
+            let fz = rand(1, 5);
+            let fm = rand(2, 8);
+            let num = rand(2, 10);
+            q = `${fz}/${fm}×${num}`;
+            answer = null;
+        } else if (type === "simple") {
+            let per = rand(10, 80);
+            q = `120×${per}%`;
+            answer = 120 * per / 100;
+        } else if (type === "math") {
+            let price = rand(80, 200);
+            let discount = rand(70, 90);
+            q = `商品原价${price}元，打${discount}折，现价多少元？`;
+            answer = price * discount / 100;
+        }
+    }
+
+    return { question: q, stdAnswer: answer };
 }
 
+// 自动计算标准答案
 function calcStandardAnswer(question) {
     try {
         let str = question
             .replaceAll("×", "*")
             .replaceAll("÷", "/")
-            .replace(/(\d+)\/(\d+)/g, "($1/$2)");
+            .replace(/(\d+)\/(\d+)/g, "($1/$2)")
+            .replace(/(\d+)%/g, "($1/100)");
         let res = eval(str);
         return Number(res.toFixed(4));
     } catch (e) {
@@ -86,6 +218,7 @@ function calcStandardAnswer(question) {
     }
 }
 
-const typeMap = {oral: "口算",simple: "简便计算",math: "应用题"}
-const levelMap = {easy: "基础简单",hard: "培优提升"}
-export { QuestionBank, calcStandardAnswer, typeMap, levelMap }
+const typeMap = { oral: "口算", simple: "简便计算", math: "应用题" }
+const levelMap = { easy: "基础简单", hard: "培优提升" }
+
+export { generateQuestion, calcStandardAnswer, typeMap, levelMap }
