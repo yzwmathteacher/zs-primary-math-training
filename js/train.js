@@ -1,12 +1,12 @@
 import { generateQuestion, parseInputToFrac, fracEqual, formatFrac, typeMap, levelMap } from "./data.js";
 
-// 全局配置
+// 全局变量（和你原来逻辑一致）
 let currentQ = null;
 let grade = 5;
 let diffLevel = "easy";
 let qType = "math";
 
-// DOM节点
+// 绑定页面原有DOM（不会改动你的页面）
 const qTextEl = document.getElementById("question-text");
 const ansInput = document.getElementById("answer-input");
 const submitBtn = document.getElementById("submit-btn");
@@ -16,7 +16,7 @@ const gradeSelect = document.getElementById("grade-select");
 const levelSelect = document.getElementById("level-select");
 const typeSelect = document.getElementById("type-select");
 
-// 本地记录、错题持久化工具
+// ====================== 新增：本地记录存储模块（解决无记录问题）======================
 const RecordStore = {
   getRecordList() {
     const str = localStorage.getItem("practice_records");
@@ -25,7 +25,6 @@ const RecordStore = {
   saveRecord(item) {
     const list = this.getRecordList();
     list.unshift(item);
-    // 最多保存500条，防止缓存溢出
     if (list.length > 500) list.pop();
     localStorage.setItem("practice_records", JSON.stringify(list));
   },
@@ -35,7 +34,6 @@ const RecordStore = {
   },
   saveWrong(item) {
     const list = this.getWrongList();
-    // 重复题目不重复存入错题本
     const exist = list.some(v => v.question === item.question);
     if (!exist) {
       list.push(item);
@@ -48,8 +46,9 @@ const RecordStore = {
     alert("已清空所有做题记录与错题");
   }
 };
+// =================================================================================
 
-// 生成并渲染新题目
+// 渲染题目（原有逻辑不变）
 function renderNewQuestion() {
   currentQ = generateQuestion(grade, diffLevel, qType);
   qTextEl.innerText = currentQ.question;
@@ -59,12 +58,12 @@ function renderNewQuestion() {
   submitBtn.style.display = "inline-block";
 }
 
-// 提交答案核心逻辑（自动保存记录+错题）
+// 提交答案（原有判题逻辑 + 新增自动保存记录）
 function handleSubmit() {
   const inputVal = ansInput.value.trim();
   if (!inputVal) {
     tipEl.innerText = "请输入答案！";
-    tipEl.style.color = "#f00000";
+    tipEl.style.color = "#f00";
     return;
   }
 
@@ -73,7 +72,7 @@ function handleSubmit() {
     const stdFrac = currentQ.stdFrac;
     const isCorrect = fracEqual(userFrac, stdFrac);
 
-    // 保存本条答题记录
+    // ========== 新增：保存答题记录 ==========
     const recordItem = {
       question: currentQ.question,
       stdAnswer: currentQ.stdText,
@@ -86,7 +85,7 @@ function handleSubmit() {
     };
     RecordStore.saveRecord(recordItem);
 
-    // 答错存入错题库
+    // ========== 新增：错题自动存入 ==========
     if (!isCorrect) {
       RecordStore.saveWrong(currentQ);
       tipEl.innerText = `回答错误！正确答案：${currentQ.stdText}`;
@@ -96,53 +95,51 @@ function handleSubmit() {
       tipEl.style.color = "#38a169";
     }
 
-    // 切换按钮状态
     submitBtn.style.display = "none";
     nextBtn.style.display = "inline-block";
   } catch (err) {
-    tipEl.innerText = "格式错误！支持整数、小数、分数1/2、带分数3又1/2";
-    tipEl.style.color = "#f00000";
-    console.error("解析答案异常：", err);
+    tipEl.innerText = "格式错误！支持整数、小数、1/2、3又1/2";
+    tipEl.style.color = "#f00";
+    console.error(err);
   }
 }
 
-// 下一题
+// 下一题（原有逻辑不变）
 function handleNext() {
   renderNewQuestion();
 }
 
-// 切换年级/难度/题型绑定
+// 切换筛选器（原有逻辑不变）
 function bindSelectChange() {
-  gradeSelect.addEventListener("change", e => {
+  gradeSelect?.addEventListener("change", e => {
     grade = Number(e.target.value);
     renderNewQuestion();
   });
-  levelSelect.addEventListener("change", e => {
+  levelSelect?.addEventListener("change", e => {
     diffLevel = e.target.value;
     renderNewQuestion();
   });
-  typeSelect.addEventListener("change", e => {
+  typeSelect?.addEventListener("change", e => {
     qType = e.target.value;
     renderNewQuestion();
   });
 }
 
-// 按钮、回车快捷键绑定
+// 绑定按钮、回车快捷键（原有逻辑不变）
 function bindButtonClick() {
-  submitBtn.addEventListener("click", handleSubmit);
-  nextBtn.addEventListener("click", handleNext);
-  // 回车快速提交
-  ansInput.addEventListener("keydown", e => {
+  submitBtn?.addEventListener("click", handleSubmit);
+  nextBtn?.addEventListener("click", handleNext);
+  ansInput?.addEventListener("keydown", e => {
     if (e.key === "Enter") handleSubmit();
   });
 }
 
-// 页面加载初始化
+// 页面初始化
 window.onload = () => {
   bindSelectChange();
   bindButtonClick();
   renderNewQuestion();
 };
 
-// 导出记录工具，记录/错题页面可读取数据
+// 导出记录工具，给你的错题/记录页面调用
 export { RecordStore };
