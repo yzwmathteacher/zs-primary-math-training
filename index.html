@@ -3,77 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>大湾区全科智能刷题系统</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: "Microsoft Yahei", sans-serif;
-        }
-        body {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-        .control-bar {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-        select {
-            padding: 8px 12px;
-            font-size: 16px;
-            border: 1px solid #2b7bdd;
-            border-radius: 6px;
-            color: #111;
-        }
-        .question-box {
-            border: 2px solid #2b7bdd;
-            border-radius: 10px;
-            padding: 30px;
-        }
-        #question-text {
-            font-size: 22px;
-            margin-bottom: 20px;
-            line-height: 1.6;
-        }
-        #answer-input {
-            width: 100%;
-            padding: 12px 15px;
-            font-size: 18px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            margin-bottom: 15px;
-        }
-        .btns {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-        }
-        button {
-            padding: 10px 26px;
-            font-size: 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            background: #2b7bdd;
-            color: white;
-        }
-        button:hover {
-            background: #1f68c2;
-        }
-        #tip-text {
-            font-size: 17px;
-            font-weight: 500;
-            min-height: 24px;
-        }
-    </style>
+    <title>全科刷题</title>
 </head>
 <body>
-    <!-- 选择栏：年级、难度、题型 -->
-    <div class="control-bar">
+    <div class="select-box">
         <select id="grade-select">
             <option value="1">一年级</option>
             <option value="2">二年级</option>
@@ -93,18 +26,14 @@
         </select>
     </div>
 
-    <!-- 刷题主区域 -->
-    <div class="question-box">
+    <div class="question-area">
         <p id="question-text"></p>
-        <input type="text" id="answer-input" placeholder="输入答案：整数/小数/1/2/3又1/2">
-        <div class="btns">
-            <button id="submit-btn">提交答案</button>
-            <button id="next-btn" style="display:none;">下一题</button>
-        </div>
+        <input type="text" id="answer-input" placeholder="输入答案">
+        <button id="submit-btn">提交答案</button>
+        <button id="next-btn" style="display:none;">下一题</button>
         <p id="tip-text"></p>
     </div>
 
-    <!-- 模块化JS引入 -->
     <script type="module" src="./js/train.js"></script>
 </body>
 </html>
