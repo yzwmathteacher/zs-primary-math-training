@@ -3,37 +3,115 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>全科刷题</title>
+    <title>中山小学数学计算训练系统</title>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="select-box">
-        <select id="grade-select">
-            <option value="1">一年级</option>
-            <option value="2">二年级</option>
-            <option value="3">三年级</option>
-            <option value="4">四年级</option>
-            <option value="5" selected>五年级</option>
-            <option value="6">六年级</option>
-        </select>
-        <select id="level-select">
-            <option value="easy">基础简单</option>
-            <option value="hard">培优提升</option>
-        </select>
-        <select id="type-select">
-            <option value="oral">口算</option>
-            <option value="simple">简便计算</option>
-            <option value="math">应用题</option>
-        </select>
+    <div class="container">
+        <h1>中山市1-6年级数学计算训练平台</h1>
+        <div class="card">
+            <div class="item">
+                <h3>1. 选择年级</h3>
+                <div class="grade-box">
+                    <button class="grade-btn" data-val="1">一年级</button>
+                    <button class="grade-btn" data-val="2">二年级</button>
+                    <button class="grade-btn" data-val="3">三年级</button>
+                    <button class="grade-btn" data-val="4">四年级</button>
+                    <button class="grade-btn" data-val="5">五年级</button>
+                    <button class="grade-btn" data-val="6">六年级</button>
+                </div>
+            </div>
+            <div class="item">
+                <h3>2. 选择难度</h3>
+                <div class="level-box">
+                    <button class="level-btn" data-val="easy">基础简单</button>
+                    <button class="level-btn" data-val="hard">培优提升</button>
+                </div>
+            </div>
+            <div class="item">
+                <h3>3. 选择题型</h3>
+                <div class="type-box">
+                    <button class="type-btn" data-val="oral">口算</button>
+                    <button class="type-btn" data-val="simple">简便计算</button>
+                    <button class="type-btn" data-val="math">应用题</button>
+                </div>
+            </div>
+            <div class="item">
+                <h3>4. 设置本次训练总题量</h3>
+                <div class="num-box">
+                    <div class="num-btn active" data-num="10">10题</div>
+                    <div class="num-btn" data-num="20">20题</div>
+                    <div class="num-btn" data-num="30">30题</div>
+                    <div class="num-btn" data-num="50">50题</div>
+                </div>
+            </div>
+            <button id="startBtn" class="start-btn">开始训练</button>
+            <div class="btn-row" style="margin-top:16px;">
+                <a href="report.html" class="blue">历史训练报告</a>
+                <a href="error-book.html" class="green">错题本</a>
+            </div>
+        </div>
     </div>
+    <script>
+        const select = {grade:null, level:null, type:null, totalNum:10};
+        const gradeBtns = document.querySelectorAll('.grade-btn');
+        const levelBtns = document.querySelectorAll('.level-btn');
+        const typeBtns = document.querySelectorAll('.type-btn');
+        const numBtns = document.querySelectorAll('.num-btn');
+        const startBtn = document.getElementById('startBtn');
 
-    <div class="question-area">
-        <p id="question-text"></p>
-        <input type="text" id="answer-input" placeholder="输入答案">
-        <button id="submit-btn">提交答案</button>
-        <button id="next-btn" style="display:none;">下一题</button>
-        <p id="tip-text"></p>
-    </div>
-
-    <script type="module" src="./js/train.js"></script>
+        gradeBtns.forEach(btn=>{
+            btn.onclick = ()=>{
+                gradeBtns.forEach(b=>b.classList.remove('active'));
+                btn.classList.add('active');
+                select.grade = btn.dataset.val;
+                const simpleBtn = document.querySelector('.type-btn[data-val="simple"]');
+                if(select.grade === "1" || select.grade === "2"){
+                    simpleBtn.disabled = true;
+                    if(select.type === "simple") select.type = null;
+                }else{
+                    simpleBtn.disabled = false;
+                }
+                checkReady();
+            }
+        })
+        levelBtns.forEach(btn=>{
+            btn.onclick = ()=>{
+                levelBtns.forEach(b=>b.classList.remove('active'));
+                btn.classList.add('active');
+                select.level = btn.dataset.val;
+                checkReady();
+            }
+        })
+        typeBtns.forEach(btn=>{
+            btn.onclick = ()=>{
+                if(btn.disabled) return;
+                typeBtns.forEach(b=>b.classList.remove('active'));
+                btn.classList.add('active');
+                select.type = btn.dataset.val;
+                checkReady();
+            }
+        })
+        numBtns.forEach(btn=>{
+            btn.onclick = ()=>{
+                numBtns.forEach(b=>b.classList.remove('active'));
+                btn.classList.add('active');
+                select.totalNum = Number(btn.dataset.num);
+            }
+        })
+        function checkReady(){
+            if(select.grade && select.level && select.type){
+                startBtn.classList.add("able");
+                startBtn.disabled = false;
+            }else{
+                startBtn.classList.remove("able");
+                startBtn.disabled = true;
+            }
+        }
+        startBtn.onclick = ()=>{
+            const params = new URLSearchParams(select);
+            window.location.href = `train.html?${params.toString()}`;
+        }
+    </script>
 </body>
 </html>
