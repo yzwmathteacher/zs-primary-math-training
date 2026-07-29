@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>训练答题中</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+    <div class="timer-wrap">
+        <div class="timer">用时：<span id="time">00:00</span></div>
+        <div class="count-info">已做<span id="done">0</span> 对<span id="ok">0</span> 错<span id="err">0</span></div>
+    </div>
+    <div class="card">
+        <div class="question-box" id="qBox">加载题目...</div>
+        <input type="text" class="answer-input" id="ansInput" placeholder="输入答案，回车提交" autocomplete="off">
+        <div class="operate-box btn-row">
+            <button class="green" id="submitBtn">提交答案</button>
+            <button class="blue" id="nextBtn">下一题</button>
+            <button class="red" id="endBtn">结束训练</button>
+        </div>
+    </div>
+</div>
+<script type="module">
+    import { startTrain } from "./js/train.js";
+    const params = new URLSearchParams(location.search);
+    const config = {
+        grade:params.get("grade"),
+        level:params.get("level"),
+        type:params.get("type"),
+        totalNum:Number(params.get("totalNum"))
+    }
+    startTrain(config);
+</script>
+</body>
+</html>
