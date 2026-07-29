@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>训练报告</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+    <h1>历史训练报告</h1>
+    <div class="card">
+        <div class="btn-row">
+            <button id="exportBtn" class="green">导出全部数据</button>
+            <button id="clearBtn" class="red">清空所有记录</button>
+            <a href="index.html" class="blue">返回首页</a>
+            <a href="error-book.html" class="green">查看错题本</a>
+        </div>
+        <div id="recordBox"></div>
+    </div>
+</div>
+<script type="module">
+    import { renderReport } from "./js/report.js";
+    renderReport();
+</script>
+</body>
+</html>
